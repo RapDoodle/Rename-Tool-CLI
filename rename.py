@@ -6,7 +6,7 @@ import argparse
 
 def format_check(filename: str, allowed_formats: list):
     """Check whether the extension is allowed."""
-    return filename.endswith(allowed_formats)
+    return filename.lower().endswith(allowed_formats)
 
 
 def file_parts(filepath: str):
@@ -29,60 +29,62 @@ if __name__ == '__main__':
         '--path', 
         metavar='DIR', 
         required=True, 
-        help='specify the source path.')
+        help='source path')
     parser.add_argument(
         '-d', 
         '--dst', 
         metavar='DIR', 
         required=False, 
         default=None, 
-        help='specify the destination path (optional).')
+        help='destination path (optional)')
     parser.add_argument(
         '-m', 
         '--match', 
         metavar='STRING', 
         required=False, 
         default='.*',
-        help='the filename to be matched.')
-    parser.add_argument(
-        '--use-regex', 
-        action='store_true',
-        default=False, 
-        help='use regular expression for matching.')
-    parser.add_argument(
-        '--ignore-case', 
-        action='store_true',
-        default=False, 
-        help='ignore case.')
+        help='the filename to be matched')
     parser.add_argument(
         '--include-extensions', 
         action='store_true',
         default=False, 
-        help='include file extensions for matching and replacing.')
+        help='include file extensions for matching and replacing')
     parser.add_argument(
-        '-r', 
-        '--replace', 
-        metavar='STRING', 
-        required=False,
-        default='',
-        help='replaced string.')
-    parser.add_argument(
-        '-e', 
-        '--enumerate', 
+        '--use-regex', 
         action='store_true',
-        help='enumerate items.')
+        default=False, 
+        help='use regular expression for matching')
+    parser.add_argument(
+        '--ignore-case', 
+        action='store_true',
+        default=False, 
+        help='ignore case')
     parser.add_argument(
         '-f', 
         '--format-filter', 
         metavar='STRING', 
         required=False,
         default=None,
-        help='formats separated by comma (,).')
+        help='case insensitive formats separated by comma (,)')
     parser.add_argument(
-        '--no-confirm', 
+        '-r', 
+        '--replace', 
+        metavar='STRING', 
+        required=False,
+        default='',
+        help='replaced string')
+    parser.add_argument(
+        '-e', 
+        '--enumerate', 
         action='store_true',
-        default=False, 
-        help='no confirmation before renaming.')
+        help='enumerate items')
+    parser.add_argument(
+        '--enumerate-from', 
+        metavar='INT', 
+        required=False,
+        default=1, 
+        type=int, 
+        help='starting number of enumeration (default: 1)')
     parser.add_argument(
         '--enumerate-style', 
         choices=[1, 2, 3, 4, 5, 6], 
@@ -90,7 +92,12 @@ if __name__ == '__main__':
         required=False,
         default=1, 
         type=int, 
-        help='enumerate style.')
+        help='enumerate style')
+    parser.add_argument(
+        '--no-confirm', 
+        action='store_true',
+        default=False, 
+        help='no confirmation before renaming')
     args = parser.parse_args()
 
     filenames = os.listdir(args.path)
@@ -98,15 +105,11 @@ if __name__ == '__main__':
 
     # Filter by file formats
     if args.format_filter is not None:
-        allowed_formats = (*args.format_filter.split(','), )
+        allowed_formats = (*args.format_filter.lower().split(','), )
         filenames = list(filter(lambda x: format_check(x, allowed_formats), filenames))
 
     # Not really used in this stage. Used in future developments
     mappings = {}
-
-    # In case of enumeration
-    if args.enumerate:
-        num_digits = len(str(len(filenames)))
 
     # Get the rename mapping
     for idx, filename in enumerate(filenames):
@@ -124,7 +127,7 @@ if __name__ == '__main__':
 
         # Compile regex
         if args.use_regex:
-            regex = re.comple(args.match, flags=re_flags)
+            regex = re.compile(args.match, flags=re_flags)
         else:
             regex = re.compile(re.escape(args.match), flags=re_flags)
         
@@ -138,25 +141,6 @@ if __name__ == '__main__':
         if not args.include_extensions:
             new_name += '.' + f_ext
 
-        # Add index number if requires enumeration
-        if args.enumerate:
-            (f_name, f_ext) = file_parts(new_name)
-
-            # Enumerate styles
-            if args.enumerate_style == 1:
-                f_name += str(idx).zfill(num_digits)
-            elif args.enumerate_style == 2:
-                f_name += ' ' + str(idx).zfill(num_digits)
-            elif args.enumerate_style == 3:
-                f_name += '(' + str(idx).zfill(num_digits) + ')'
-            elif args.enumerate_style == 4:
-                f_name += ' (' + str(idx).zfill(num_digits) + ')'
-            elif args.enumerate_style == 5:
-                f_name += '[' + str(idx).zfill(num_digits) + ']'
-            elif args.enumerate_style == 6:
-                f_name += ' [' + str(idx).zfill(num_digits) + ']'
-            new_name = f"{f_name}.{f_ext}"
-
         mappings[filename] = {
             'new_name': new_name,
         }
@@ -165,6 +149,33 @@ if __name__ == '__main__':
     if num_match == 0:
         print('No matching files found.')
         exit()
+
+    # Add item count
+    if args.enumerate:
+        num_digits = len(str(len(filenames)))
+        enum_count = args.enumerate_from
+        for filename, info in mappings.items():
+            # Add index number
+            (f_name, f_ext) = file_parts(filename)
+
+            # Enumerate styles
+            if args.enumerate_style == 1:
+                f_name += str(enum_count).zfill(num_digits)
+            elif args.enumerate_style == 2:
+                f_name += ' ' + str(enum_count).zfill(num_digits)
+            elif args.enumerate_style == 3:
+                f_name += '(' + str(enum_count).zfill(num_digits) + ')'
+            elif args.enumerate_style == 4:
+                f_name += ' (' + str(enum_count).zfill(num_digits) + ')'
+            elif args.enumerate_style == 5:
+                f_name += '[' + str(enum_count).zfill(num_digits) + ']'
+            elif args.enumerate_style == 6:
+                f_name += ' [' + str(enum_count).zfill(num_digits) + ']'
+            new_name = f"{f_name}.{f_ext}"
+
+            mappings[filename]['new_name'] = new_name
+            enum_count = enum_count + 1
+
 
     # Confirm with users
     if not args.no_confirm:
