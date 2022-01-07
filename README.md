@@ -64,7 +64,7 @@ optional arguments:
     The program supports enumeration starting from any index. By default, `1` is used. To change the starting index, use `--enumerate-from <INT>`.
     For example, to start from `0`, add `--enumerate-from 0`.
 
-## Other options
+### Other options
 - Ignore confirmation
     By default, the program will prompt users for confirmation, showing the files' old and new name, source folder, and destination folder (in any), before proceeding. The user may opt for ignoring the confirmation by specifying `--no-confirm`.
 
