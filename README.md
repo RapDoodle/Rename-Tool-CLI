@@ -59,21 +59,27 @@ optional arguments:
     The program supports six predefined enumeration suffix templates. By default, template `1` is used. To specify another style, use `--enumerate-style <style-id>`.
 
     1. No bracket (without space)
+
         `IMG.jpg` to `IMG01.jpg`
 
     2. No bracket (with space)
+
         `IMG.jpg` to `IMG 01.jpg`
 
     3. Bracket (without space)
+
         `IMG.jpg` to `IMG(01).jpg`
 
     4. Bracket (with space)
+
         `IMG.jpg` to `IMG (01).jpg`
 
     5. Square bracket (without space)
+
         `IMG.jpg` to `IMG[01].jpg`
 
     6. Square bracket (with space)
+    
         `IMG.jpg` to `IMG [01].jpg`
 
 - Starting index
