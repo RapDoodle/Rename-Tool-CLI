@@ -42,7 +42,7 @@ if __name__ == '__main__':
         '--match', 
         metavar='STRING', 
         required=False, 
-        default='.*',
+        default=None,
         help='the filename to be matched')
     parser.add_argument(
         '--include-extensions', 
@@ -108,6 +108,11 @@ if __name__ == '__main__':
         allowed_formats = (*args.format_filter.lower().split(','), )
         filenames = list(filter(lambda x: format_check(x, allowed_formats), filenames))
 
+    # Default arguments
+    if args.match is None:
+        args.match = '.*'
+        args.use_regex = True
+
     # Not really used in this stage. Used in future developments
     mappings = {}
 
@@ -144,7 +149,7 @@ if __name__ == '__main__':
         mappings[filename] = {
             'new_name': new_name,
         }
-
+    
     num_match = len(mappings)
     if num_match == 0:
         print('No matching files found.')
@@ -156,7 +161,7 @@ if __name__ == '__main__':
         enum_count = args.enumerate_from
         for filename, info in mappings.items():
             # Add index number
-            (f_name, f_ext) = file_parts(filename)
+            (f_name, f_ext) = file_parts(info['new_name'])
 
             # Enumerate styles
             if args.enumerate_style == 1:
