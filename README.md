@@ -18,12 +18,12 @@ Here are some examples. For detailed usage, please read the next section. Note: 
     ```bash
     $ python3 rename.py --path /home/my_folder --match ".*" --use-regex --replace "IMG" --enumerate --enumerate-style 4 --format-filter JPG,CR3 --dst /home/my_folder_2
     ```
-    
+
     Note: 
 
-        1. Values in `format-filter` are case insensitive. The search will include `JPG`, `jpg`, `CR3`, and `cr3`.
+    - Values in `format-filter` are case insensitive. The search will include `JPG`, `jpg`, `CR3`, and `cr3`.
 
-        2. `enumerate-style` is predefined. Please read the next section for more information.
+    - `enumerate-style` is predefined. Please read the next section for more information.
 
 ## Usage
 
