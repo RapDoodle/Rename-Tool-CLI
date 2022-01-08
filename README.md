@@ -6,7 +6,7 @@ Here are some examples. For detailed usage, please read the next section. Note: 
 
 1. Rename all files only to contain index numbers (with regular expression). For example, rename `3C7A2474.JPG` to `002.JPG` where `002` is the second file in the folder.
     ```bash
-    $ python3 rename.py --path /home/my_folder --match ".*" --use-regex --enumerate
+    $ python3 rename.py --path /home/my_folder --enumerate
     ```
 
 1. Rename all `foo` to `bar` (without regular expression). For example, rename `image_foo.jpg` to `image_bar.jpg`.
