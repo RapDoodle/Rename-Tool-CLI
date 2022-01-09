@@ -157,7 +157,7 @@ if __name__ == '__main__':
 
     # Add item count
     if args.enumerate:
-        num_digits = len(str(len(filenames)))
+        num_digits = len(str(num_match))
         enum_count = args.enumerate_from
         for filename, info in mappings.items():
             # Add index number
