@@ -22,13 +22,14 @@ def y_n_choice(msg = 'Do you want to continue?'):
     return True if (choice == 'Y' or choice == 'y' or choice == '') else False
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-p', 
         '--path', 
         metavar='DIR', 
-        required=True, 
+        required=False, 
+        default='.',
         help='source path')
     parser.add_argument(
         '-d', 
@@ -216,3 +217,8 @@ if __name__ == '__main__':
         idx = idx + 1
     
     print('\nDone.')
+
+
+if __name__ == '__main__':
+    main()
+

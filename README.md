@@ -1,22 +1,30 @@
 # Rename Tool CLI
 Rename multiple files according to user-defined criteria in command line
 
+## Installation
+
+Make sure Python is installed. Then, install with `pip`.
+
+```bash
+$ pip install git+https://github.com/RapDoodle/Rename-Tool-CLI.git
+```
+
 ## Examples
 Here are some examples. For detailed usage, please read the next section. Note: For Windows users, replace `python3` in the examples with `python`.
 
 1. Rename all files only to contain index numbers (with regular expression). For example, rename `3C7A2474.JPG` to `002.JPG` where `002` is the second file in the folder.
     ```bash
-    $ python3 rename.py --path /home/my_folder --enumerate
+    $ brname --path /home/my_folder --enumerate
     ```
 
 1. Rename all `foo` to `bar` (without regular expression). For example, rename `image_foo.jpg` to `image_bar.jpg`.
     ```bash
-    $ python3 rename.py --path /home/my_folder --match "foo" --replace "bar" 
+    $ brname --path /home/my_folder --match "foo" --replace "bar" 
     ```
 
 1. Rename all `JPG` and `CR3` files in the folder to names starting with `IMG` and ends (not including extension) with enumeration. Then, store all files in another folder. For example, copy `3C7A2474.JPG` from `my_folder`, and store it in `my_folder_2` as `IMG (01).JPG`.
     ```bash
-    $ python3 rename.py --path /home/my_folder --match ".*" --use-regex --replace "IMG" --enumerate --enumerate-style 4 --format-filter JPG,CR3 --dst /home/my_folder_2
+    $ brname --path /home/my_folder --match ".*" --use-regex --replace "IMG" --enumerate --enumerate-style 4 --format-filter JPG,CR3 --dst /home/my_folder_2
     ```
 
     Note: 
@@ -29,13 +37,13 @@ Here are some examples. For detailed usage, please read the next section. Note: 
 
 ### Command help
 ```
-usage: rename.py [-h] -p DIR [-d DIR] [-m STRING] [--include-extensions]
-                 [--use-regex] [--ignore-case] [-f STRING] [-r STRING] [-e]
-                 [--enumerate-from INT] [--enumerate-style INT] [--no-confirm]
+usage: brname [-h] [-p DIR] [-d DIR] [-m STRING] [--include-extensions]
+              [--use-regex] [--ignore-case] [-f STRING] [-r STRING] [-e]
+              [--enumerate-from INT] [--enumerate-style INT] [--no-confirm]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -p DIR, --path DIR    source path
+  -p DIR, --path DIR    source path (default: current path)
   -d DIR, --dst DIR     destination path (optional)
   -m STRING, --match STRING
                         the filename to be matched
